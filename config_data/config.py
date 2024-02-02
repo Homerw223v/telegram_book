@@ -1,30 +1,12 @@
-from dataclasses import dataclass
+from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
-from environs import Env
+load_dotenv()
 
 
-@dataclass
-class TgBot:
+class Settings(BaseSettings):
     token: str
-    admin_id: int
+    admin_id: str
 
 
-@dataclass
-class Config:
-    tg_bot: TgBot
-
-
-def load_config(path: str | None = None) -> Config:
-    """Load variables from .env file
-    :param path: Path to .env file
-    :type path: str | None
-
-    :rtype: Config
-    :return: Class Config with all variables in .env file
-    """
-    env = Env()
-    env.read_env(path)
-    return Config(tg_bot=TgBot(
-        token=env('TOKEN'),
-        admin_id=env.list('ADMIN')
-    ))
+settings = Settings()

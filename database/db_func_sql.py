@@ -9,7 +9,9 @@ async def get_user(user_id: int) -> tuple:
     :rtype: tuple
     :return Information about user
     """
-    return cur.execute('SELECT * FROM readers WHERE user_id = ?', (user_id,)).fetchone()
+    return cur.execute(
+        'SELECT * FROM readers WHERE user_id = ?', (user_id,)
+    ).fetchone()
 
 
 async def create_reader(user_id: int, username: str) -> None:
@@ -21,7 +23,14 @@ async def create_reader(user_id: int, username: str) -> None:
 
     :rtype: None
     """
-    cur.execute('INSERT INTO readers(user_id, username, page) VALUES (?,?,?)', (user_id, username, 1,))
+    cur.execute(
+        'INSERT INTO readers(user_id, username, page) VALUES (?,?,?)',
+        (
+            user_id,
+            username,
+            1,
+        ),
+    )
     base.commit()
 
 
@@ -37,7 +46,9 @@ async def set_page(user_id: int, page: int = 1) -> int | None:
     :return: Number of saved page
     """
     try:
-        cur.execute('UPDATE readers SET page=? WHERE user_id=?', (page, user_id))
+        cur.execute(
+            'UPDATE readers SET page=? WHERE user_id=?', (page, user_id)
+        )
         base.commit()
         return page
     except AttributeError:
@@ -52,7 +63,9 @@ async def get_page(user_id: int) -> int | None:
     :rtype: [int, None]
     :return: Page from which to continue reading
     """
-    page = cur.execute('SELECT page FROM readers WHERE user_id=?', (user_id,)).fetchone()[0]
+    page = cur.execute(
+        'SELECT page FROM readers WHERE user_id=?', (user_id,)
+    ).fetchone()[0]
     return page
 
 
@@ -65,7 +78,9 @@ async def get_user_bookmarks(user_id: int) -> list | None:
     :rtype: list | None
     :return: All bookmarks for user
     """
-    answer = cur.execute('SELECT page FROM bookmarks WHERE user_id=?', (user_id,)).fetchall()
+    answer = cur.execute(
+        'SELECT page FROM bookmarks WHERE user_id=?', (user_id,)
+    ).fetchall()
     try:
         bookmarks = [i[0] for i in answer]
         bookmarks.sort()
@@ -84,9 +99,21 @@ async def add_bookmark(user_id: int, page: int) -> None:
 
     :rtype: None
     """
-    exists = cur.execute('SELECT * FROM bookmarks WHERE user_id=? AND page=?', (user_id, page,)).fetchone()
+    exists = cur.execute(
+        'SELECT * FROM bookmarks WHERE user_id=? AND page=?',
+        (
+            user_id,
+            page,
+        ),
+    ).fetchone()
     if not exists:
-        cur.execute('INSERT INTO bookmarks(user_id, page) VALUES(?,?)', (user_id, page,))
+        cur.execute(
+            'INSERT INTO bookmarks(user_id, page) VALUES(?,?)',
+            (
+                user_id,
+                page,
+            ),
+        )
         base.commit()
 
 
@@ -100,5 +127,7 @@ async def delete_bookmark(user_id: int, page: int) -> None:
 
     :rtype: None
     """
-    cur.execute('DELETE FROM bookmarks WHERE user_id=? AND page=?', (user_id, page))
+    cur.execute(
+        'DELETE FROM bookmarks WHERE user_id=? AND page=?', (user_id, page)
+    )
     base.commit()

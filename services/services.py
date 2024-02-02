@@ -10,13 +10,13 @@ def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
     :rtype: tuple
     :return: A tuple with split text and index of last symbol
     """
-    answer: str = text[start:start + size]
+    answer: str = text[start : start + size]
     indexes: list = []
     for i in (',', '.', '!', ':', ';', '?'):
         indexes.append(answer.rfind(f'{i}'))
     indexes.sort()
     index: int = max(indexes)
-    return answer[:index + 1], index + 1
+    return answer[: index + 1], index + 1
 
 
 async def prepare_book(path: str | None):

@@ -8,16 +8,18 @@ def create_bookmarks_keyboard(*args: int) -> InlineKeyboardMarkup:
     """Creating  inline keyboard for view bookmarks"""
     kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
     for button in sorted(args):
-        kb_builder.row(InlineKeyboardButton(
-            text=f'{button} - {book[button][:100]}',
-            callback_data=str(button)
-        ))
-    kb_builder.row(InlineKeyboardButton(
-        text=LEXICON['edit_bookmarks_button'],
-        callback_data='edit_bookmarks'),
+        kb_builder.row(
+            InlineKeyboardButton(
+                text=f'{button} - {book[button][:100]}',
+                callback_data=str(button),
+            )
+        )
+    kb_builder.row(
         InlineKeyboardButton(
-            text=LEXICON['cancel'],
-            callback_data='cancel'),
+            text=LEXICON['edit_bookmarks_button'],
+            callback_data='edit_bookmarks',
+        ),
+        InlineKeyboardButton(text=LEXICON['cancel'], callback_data='cancel'),
     )
     return kb_builder.as_markup()
 
@@ -26,10 +28,13 @@ def create_edit_keyboard(*args: int) -> InlineKeyboardMarkup:
     """Creating inline keyboard for deleting bookmarks"""
     kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
     for button in sorted(args):
-        kb_builder.row(InlineKeyboardButton(
-            text=f'{LEXICON["del"]} {button} - {book[button][:100]}',
-            callback_data=f'{button}del'))
-    kb_builder.row(InlineKeyboardButton(
-        text=LEXICON['cancel'],
-        callback_data='cancel'))
+        kb_builder.row(
+            InlineKeyboardButton(
+                text=f'{LEXICON["del"]} {button} - {book[button][:100]}',
+                callback_data=f'{button}del',
+            )
+        )
+    kb_builder.row(
+        InlineKeyboardButton(text=LEXICON['cancel'], callback_data='cancel')
+    )
     return kb_builder.as_markup()
